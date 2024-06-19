@@ -1,6 +1,4 @@
-======
-chompy
-======
+# chompy
 
 A letter-guessing game of treachery. Guess wrong and be lowered into the depths of Chompy's chompers!
 
