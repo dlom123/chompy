@@ -10,3 +10,5 @@ A letter-guessing game of treachery. Guess wrong and be lowered into the depths 
  \  \     \ \ / /      /  /    \  \   \____/   \____/   /  /    \  \     \ \ / /      /  / 
   \__\     \/ \/      /__/      \__\                   /__/      \__\     \/ \/      /__/  
 ```
+
+![Chompy screenshot](https://github.com/dlom123/chompy/blob/main/img/screenshot.png?raw=true)
