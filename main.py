@@ -119,7 +119,7 @@ def generate_phrase():
     global phrase
     # TODO: Actually make this generate various phrases
     # phrase = "What if there is no tomorrow?"
-    phrase = 'nnn mm zzz xxx cc v bbbb'
+    phrase = 'What if there is no tomorrow?'
 
 
 def update_phrase():
