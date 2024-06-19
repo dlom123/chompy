@@ -1,5 +1,6 @@
 import curses
 import random
+import sys
 
 # initialization variables
 screen = None
@@ -231,51 +232,54 @@ def show_outro(losing_player_num):
 
 
 def main(stdscr):
-    global screen
-
-    curses.curs_set(0)  # do not show the text cursor
-
     try:
-        screen = stdscr.subwin(height, width, 0, 0)
-    except curses.error:
-        # terminal size too small for subwin height/width, most likely
-        raise Exception(
-            f"""Terminal window must be at least {height} rows by {width} cols.
-            Yours is {curses.LINES} by {curses.COLS}.""")
-    screen.box()
+        global screen
 
-    # set up the game screen
-    init()
-    show_game()
+        curses.curs_set(0)  # do not show the text cursor
 
-    # begin player turns
-    while True:
-        c = screen.getch(1, 1)
-        char = chr(c)
-        if not char.isalpha():
-            # ignore non-alpha input
-            continue
+        try:
+            screen = stdscr.subwin(height, width, 0, 0)
+        except curses.error:
+            # terminal size too small for subwin height/width, most likely
+            raise Exception(
+                f"""Terminal window must be at least {height} rows by {width} cols.
+                Yours is {curses.LINES} by {curses.COLS}.""")
+        screen.box()
 
-        if char not in guessed_letters:
-            # mark the given letter as used
-            guessed_letters.append(char)
-            update_unused_letters()
-            if char in phrase:
-                # correct guess!
-                update_phrase()
+        # set up the game screen
+        init()
+        show_game()
+
+        # begin player turns
+        while True:
+            c = screen.getch(1, 1)
+            char = chr(c)
+            if not char.isalpha():
+                # ignore non-alpha input
+                continue
+
+            if char not in guessed_letters:
+                # mark the given letter as used
+                guessed_letters.append(char)
+                update_unused_letters()
+                if char in phrase:
+                    # correct guess!
+                    update_phrase()
+                else:
+                    # wrong guess -- lower the player!
+                    players[whose_turn]['wrong'] += 1
+                    update_player(whose_turn, players[whose_turn]['wrong'])
+                    if players[whose_turn]['wrong'] == 4:
+                        # game over -- activate Chompy!
+                        show_outro(whose_turn)
+                        curses.endwin()
+                        break
+                next_turn()
             else:
-                # wrong guess -- lower the player!
-                players[whose_turn]['wrong'] += 1
-                update_player(whose_turn, players[whose_turn]['wrong'])
-                if players[whose_turn]['wrong'] == 4:
-                    # game over -- activate Chompy!
-                    show_outro(whose_turn)
-                    curses.endwin()
-                    break
-            next_turn()
-        else:
-            # TODO: user feedback for already-used letter
-            pass
+                # TODO: user feedback for already-used letter
+                pass
+    except KeyboardInterrupt:
+        sys.exit(1)
 
 
 if __name__ == '__main__':
